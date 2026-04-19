@@ -1,0 +1,29 @@
+<svg width="400" height="400" viewBox="0 0 320 320" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Radix League circular logo</title>
+<desc>Radix League circular logo — transparent background, lightning bolt hexagon, wordmark</desc>
+
+<circle cx="160" cy="160" r="155" fill="#1a1a2e"/>
+<circle cx="160" cy="160" r="155" fill="none" stroke="#ff6b35" stroke-width="4"/>
+<circle cx="160" cy="160" r="148" fill="none" stroke="#ffe14d" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+<polygon points="160,36 218,70 218,138 160,172 102,138 102,70" fill="#ff6b35"/>
+<polygon points="160,47 208,77 208,131 160,161 112,131 112,77" fill="#1a1a2e"/>
+<polygon points="160,55 202,82 202,126 160,153 118,126 118,82" fill="#ff6b35" opacity="0.1"/>
+
+<polygon points="178,57 133,110 157,110 129,163 192,96 165,96 192,57" fill="#ffe14d" stroke="#ff9500" stroke-width="2" stroke-linejoin="round"/>
+
+<rect x="116" y="178" width="88" height="19" rx="9" fill="#7c3aff"/>
+<text x="160" y="192" text-anchor="middle" font-family="'Inter',Arial,sans-serif" font-size="9.5" font-weight="700" fill="#ffffff" letter-spacing="0.8">SEASON 2 · 2026</text>
+
+<text x="160" y="224" text-anchor="middle" font-family="'Hubot Sans','Arial Black',Impact,sans-serif" font-size="30" font-weight="900" fill="#ffffff" letter-spacing="-1">RADIX</text>
+<text x="160" y="246" text-anchor="middle" font-family="'Hubot Sans','Arial Black',Impact,sans-serif" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="5">LEAGUE</text>
+
+<rect x="62" y="257" width="196" height="18" rx="9" fill="#ffe14d"/>
+<text x="160" y="270" text-anchor="middle" font-family="'Inter',Arial,sans-serif" font-size="8" font-weight="800" fill="#1a1a2e" letter-spacing="0.8">WHERE RADICAL MINDS COMPETE</text>
+
+<circle cx="112" cy="38" r="4" fill="#ffe14d" opacity="0.7"/>
+<circle cx="208" cy="38" r="3" fill="#00d4aa" opacity="0.7"/>
+<circle cx="264" cy="100" r="4" fill="#ff6b35" opacity="0.6"/>
+<circle cx="56" cy="100" r="3" fill="#7c3aff" opacity="0.6"/>
+
+</svg>
