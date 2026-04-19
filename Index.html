@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radix League · Season 1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hubot+Sans:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #001543;
+      --blue: #005dff;
+      --cyan: #00ceff;
+      --white: #ffffff;
+      --offwhite: #f0f2f4;
+      --grey: #818489;
+      --grey-light: #d0d3d8;
+      --blue-light: #e8f0ff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--offwhite);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--navy);
+      padding: 0 48px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(0,93,255,0.3);
+    }
+    .nav-logo {
+      font-family: 'Hubot Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    .nav-links a {
+      color: #85a8cc;
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+
+    /* HERO */
+    .hero {
+      background: var(--navy);
+      padding: 64px 48px 52px;
+      border-bottom: 2px solid var(--blue);
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero h1 span { color: var(--blue); }
+    .hero-sub {
+      font-size: 15px;
+      color: #85a8cc;
+      margin-bottom: 36px;
+      line-height: 1.6;
+      max-width: 480px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      background: rgba(0,93,255,0.12);
+      border: 0.5px solid rgba(0,93,255,0.35);
+      border-radius: 10px;
+      padding: 14px 24px;
+      min-width: 90px;
+    }
+    .hero-stat-num {
+      font-family: 'Hubot Sans', sans-serif;
+      color: var(--white);
+      font-size: 26px;
+      font-weight: 700;
+    }
+    .hero-stat-label {
+      color: #85a8cc;
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    /* PAGE */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 48px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .section-label {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--grey-light);
+    }
+
+    /* PODIUM */
+    .podium {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .pod {
+      border-radius: 10px;
+      padding: 16px 14px;
+      width: 140px;
+      text-align: center;
+    }
+    .pod-gold {
+      background: var(--navy);
+      border: 1.5px solid var(--blue);
+      padding-bottom: 32px;
+    }
+    .pod-silver, .pod-bronze {
+      background: var(--white);
+      border: 0.5px solid var(--grey-light);
+    }
+    .pod-icon { font-size: 22px; margin-bottom: 8px; }
+    .pod-name {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .pod-name-gold { color: var(--white); }
+    .pod-name-other { color: var(--navy); }
+    .pod-pts-gold { font-size: 12px; color: var(--cyan); }
+    .pod-pts-other { font-size: 12px; color: var(--grey); }
+
+    /* TABLE */
+    .table-card {
+      background: var(--white);
+      border: 0.5px solid var(--grey-light);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      table-layout: fixed;
+    }
+    .lb-table th {
+      background: var(--offwhite);
+      color: var(--grey);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 11px 18px;
+      text-align: left;
+      border-bottom: 0.5px solid var(--grey-light);
+    }
+    .lb-table td {
+      padding: 14px 18px;
+      border-bottom: 0.5px solid #f0f2f4;
+      color: var(--navy);
+    }
+    .lb-table tr:last-child td { border-bottom: none; }
+    .lb-table tr.top td { background: var(--blue-light); }
+    .rank { color: var(--grey); font-size: 13px; font-weight: 600; }
+    .rank-1 { color: var(--blue); font-family: 'Hubot Sans', sans-serif; font-size: 15px; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 8px;
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    /* CHALLENGES */
+    .challenges-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .ch-card {
+      background: var(--white);
+      border: 0.5px solid var(--grey-light);
+      border-top: 3px solid var(--blue);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.15s;
+    }
+    .ch-card:hover { transform: translateY(-2px); }
+    .ch-num { font-size: 11px; color: var(--grey); margin-bottom: 6px; }
+    .ch-title {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .ch-meta { font-size: 12px; color: var(--grey); margin-bottom: 6px; }
+    .ch-winner { font-size: 13px; color: var(--blue); font-weight: 500; }
+    .ch-tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    /* POLL */
+    .poll-card {
+      background: var(--white);
+      border: 0.5px solid var(--grey-light);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .poll-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      gap: 16px;
+    }
+    .poll-title {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    .poll-sub { font-size: 13px; color: var(--grey); }
+    .poll-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: var(--blue-light);
+      color: var(--blue);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .poll-live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .poll-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .poll-opt {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      padding: 13px 16px;
+      border-radius: 8px;
+      border: 0.5px solid var(--grey-light);
+      background: #f8f9fb;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .poll-opt:hover { border-color: var(--blue); }
+    .poll-opt.selected { border-color: var(--blue); background: var(--blue-light); }
+    .poll-opt-radio {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--grey-light);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .poll-opt.selected .poll-opt-radio { border-color: var(--blue); background: var(--blue); }
+    .poll-opt-radio-inner {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--white);
+      display: none;
+    }
+    .poll-opt.selected .poll-opt-radio-inner { display: block; }
+    .poll-opt-label { font-size: 14px; color: var(--navy); flex: 1; }
+    .poll-bar-wrap { height: 3px; background: #eee; border-radius: 2px; margin-top: 6px; }
+    .poll-bar { height: 3px; background: var(--blue); border-radius: 2px; width: 0; transition: width 0.5s ease; }
+    .poll-pct { font-size: 12px; color: var(--grey); min-width: 34px; text-align: right; }
+    .poll-footer { display: flex; align-items: center; gap: 16px; }
+    .poll-btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: var(--blue);
+      color: var(--white);
+      font-family: 'Hubot Sans', sans-serif;
+      letter-spacing: 0.3px;
+      transition: background 0.2s;
+    }
+    .poll-btn:hover { background: var(--navy); }
+    .poll-note { font-size: 12px; color: var(--grey); }
+    .poll-thanks { display: none; font-size: 13px; color: var(--blue); font-weight: 700; font-family: 'Hubot Sans', sans-serif; }
+
+    /* RECOGNITION WALL */
+    .rwall { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .rw-card {
+      background: var(--white);
+      border: 0.5px solid var(--grey-light);
+      border-radius: 12px;
+      padding: 22px;
+      transition: transform 0.15s;
+    }
+    .rw-card:hover { transform: translateY(-2px); }
+    .rw-card.featured { background: var(--navy); border: none; }
+    .rw-card.wide { grid-column: 1 / -1; }
+    .rw-ch { font-size: 11px; color: var(--grey); margin-bottom: 6px; }
+    .rw-ch-f { font-size: 11px; color: var(--cyan); margin-bottom: 6px; }
+    .rw-recent {
+      display: inline-block;
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--blue);
+      color: var(--white);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .rw-team {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    .rw-team-f {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 5px;
+    }
+    .rw-members { font-size: 12px; color: var(--grey); margin-bottom: 14px; }
+    .rw-members-f { font-size: 12px; color: #85a8cc; margin-bottom: 14px; }
+    .rw-quote {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.7;
+      border-left: 2px solid var(--blue);
+      padding-left: 14px;
+      border-radius: 0;
+    }
+    .rw-quote-f {
+      font-size: 13px;
+      color: #85a8cc;
+      line-height: 1.7;
+      border-left: 2px solid var(--cyan);
+      padding-left: 14px;
+      border-radius: 0;
+    }
+
+    /* TEASER */
+    .teaser {
+      background: var(--navy);
+      border-radius: 12px;
+      border: 1px solid var(--blue);
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+    .teaser-left { flex: 1; }
+    .teaser-eyebrow {
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .teaser-title {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .teaser-title span { color: var(--blue); }
+    .teaser-hint { font-size: 14px; color: #85a8cc; line-height: 1.6; }
+    .teaser-blur {
+      filter: blur(5px);
+      user-select: none;
+      color: #85a8cc;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+    .teaser-right {
+      text-align: center;
+      background: rgba(0,93,255,0.15);
+      border: 0.5px solid rgba(0,93,255,0.35);
+      border-radius: 10px;
+      padding: 20px 28px;
+      min-width: 140px;
+      flex-shrink: 0;
+    }
+    .lock {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px; height: 32px;
+      background: var(--blue);
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+    .lock svg { width: 16px; height: 16px; fill: var(--white); }
+    .teaser-label { font-size: 11px; color: #85a8cc; margin-bottom: 6px; }
+    .teaser-date {
+      font-family: 'Hubot Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy);
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(0,93,255,0.2);
+    }
+    .footer-logo {
+      font-family: 'Hubot Sans', sans-serif;
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+    footer p { color: #85a8cc; font-size: 12px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 680px) {
+      nav { padding: 0 20px; }
+      .hero { padding: 40px 20px 32px; }
+      .hero h1 { font-size: 32px; }
+      .page { padding: 28px 20px 48px; }
+      .challenges-grid { grid-template-columns: 1fr; }
+      .rwall { grid-template-columns: 1fr; }
+      .rw-card.wide { grid-column: 1; }
+      .teaser { flex-direction: column; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="#"><div class="nav-logo-dot"></div> Radix League</a>
+    <div class="nav-links">
+      <a href="#leaderboard" class="active">Leaderboard</a>
+      <a href="#challenges">Challenges</a>
+      <a href="#poll">Poll</a>
+      <a href="#recognition">Recognition</a>
+      <a href="#next">Next up</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Season 1 · 2025</div>
+    <h1>The Radix <span>League</span></h1>
+    <div class="hero-sub">Where radical ideas compete. One challenge at a time.</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">6</div><div class="hero-stat-label">Teams</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">Challenges done</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">85</div><div class="hero-stat-label">Radicals</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">1</div><div class="hero-stat-label">Next challenge</div></div>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <section id="leaderboard">
+      <div class="section-label">Leaderboard</div>
+      <div class="podium">
+        <div class="pod pod-silver">
+          <div class="pod-icon">🥈</div>
+          <div class="pod-name pod-name-other">The Bold Pixels</div>
+          <div class="pod-pts-other">210 pts</div>
+        </div>
+        <div class="pod pod-gold">
+          <div class="pod-icon">🥇</div>
+          <div class="pod-name pod-name-gold">Kickass Collective</div>
+          <div class="pod-pts-gold">260 pts</div>
+        </div>
+        <div class="pod pod-bronze">
+          <div class="pod-icon">🥉</div>
+          <div class="pod-name pod-name-other">The Wildcards</div>
+          <div class="pod-pts-other">185 pts</div>
+        </div>
+      </div>
+      <div class="table-card">
+        <table class="lb-table">
+          <thead>
+            <tr>
+              <th style="width:44px;">#</th>
+              <th>Team</th>
+              <th style="width:80px;text-align:center;">Ch. 1</th>
+              <th style="width:80px;text-align:center;">Ch. 2</th>
+              <th style="width:80px;text-align:center;">Ch. 3</th>
+              <th style="width:80px;text-align:right;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="top">
+              <td class="rank rank-1">1</td>
+              <td style="font-weight:600;">Kickass Collective <span class="badge">Leading</span></td>
+              <td style="text-align:center;">80</td>
+              <td style="text-align:center;">90</td>
+              <td style="text-align:center;">90</td>
+              <td style="text-align:right;font-weight:700;color:#005dff;font-family:'Hubot Sans',sans-serif;">260</td>
+            </tr>
+            <tr>
+              <td class="rank">2</td><td>The Bold Pixels</td>
+              <td style="text-align:center;">75</td><td style="text-align:center;">70</td><td style="text-align:center;">65</td>
+              <td style="text-align:right;font-weight:600;">210</td>
+            </tr>
+            <tr>
+              <td class="rank">3</td><td>The Wildcards</td>
+              <td style="text-align:center;">60</td><td style="text-align:center;">65</td><td style="text-align:center;">60</td>
+              <td style="text-align:right;font-weight:600;">185</td>
+            </tr>
+            <tr>
+              <td class="rank">4</td><td>Chaos Theory</td>
+              <td style="text-align:center;">55</td><td style="text-align:center;">60</td><td style="text-align:center;">55</td>
+              <td style="text-align:right;font-weight:600;">170</td>
+            </tr>
+            <tr>
+              <td class="rank">5</td><td>The Usual Suspects</td>
+              <td style="text-align:center;">50</td><td style="text-align:center;">55</td><td style="text-align:center;">50</td>
+              <td style="text-align:right;font-weight:600;">155</td>
+            </tr>
+            <tr>
+              <td class="rank">6</td><td>The Underdogs</td>
+              <td style="text-align:center;">45</td><td style="text-align:center;">50</td><td style="text-align:center;">45</td>
+              <td style="text-align:right;font-weight:600;">140</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="challenges">
+      <div class="section-label">Past challenges</div>
+      <div class="challenges-grid">
+        <div class="ch-card">
+          <span class="ch-tag">Completed</span>
+          <div class="ch-num">Challenge 01</div>
+          <div class="ch-title">The Picture Showdown</div>
+          <div class="ch-meta">Judged by Sandy & Arjava</div>
+          <div class="ch-winner">Won by Kickass Collective</div>
+        </div>
+        <div class="ch-card">
+          <span class="ch-tag">Completed</span>
+          <div class="ch-num">Challenge 02</div>
+          <div class="ch-title">Radix Trivia Blitz</div>
+          <div class="ch-meta">Judged by Sandy & Arjava</div>
+          <div class="ch-winner">Won by The Bold Pixels</div>
+        </div>
+        <div class="ch-card">
+          <span class="ch-tag">Completed</span>
+          <div class="ch-num">Challenge 03</div>
+          <div class="ch-title">Merch Design Challenge</div>
+          <div class="ch-meta">Judged by Sandy & Arjava</div>
+          <div class="ch-winner">Won by Kickass Collective</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="poll">
+      <div class="section-label">People's poll</div>
+      <div class="poll-card">
+        <div class="poll-header">
+          <div>
+            <div class="poll-title">Challenge 03 · Merch Design Challenge</div>
+            <div class="poll-sub">The judges have spoken — but what do you think?</div>
+          </div>
+          <div class="poll-live"><div class="poll-live-dot"></div> Open for voting</div>
+        </div>
+        <div class="poll-options">
+          <div class="poll-opt" onclick="selectOpt(this,0)">
+            <div class="poll-opt-radio"><div class="poll-opt-radio-inner"></div></div>
+            <div style="flex:1;">
+              <div class="poll-opt-label">Yes — this should become real Radix merch</div>
+              <div class="poll-bar-wrap"><div class="poll-bar" id="bar0"></div></div>
+            </div>
+            <div class="poll-pct" id="pct0"></div>
+          </div>
+          <div class="poll-opt" onclick="selectOpt(this,1)">
+            <div class="poll-opt-radio"><div class="poll-opt-radio-inner"></div></div>
+            <div style="flex:1;">
+              <div class="poll-opt-label">With some tweaks — great concept, needs refinement</div>
+              <div class="poll-bar-wrap"><div class="poll-bar" id="bar1"></div></div>
+            </div>
+            <div class="poll-pct" id="pct1"></div>
+          </div>
+          <div class="poll-opt" onclick="selectOpt(this,2)">
+            <div class="poll-opt-radio"><div class="poll-opt-radio-inner"></div></div>
+            <div style="flex:1;">
+              <div class="poll-opt-label">Needs more work — not quite there yet</div>
+              <div class="poll-bar-wrap"><div class="poll-bar" id="bar2"></div></div>
+            </div>
+            <div class="poll-pct" id="pct2"></div>
+          </div>
+        </div>
+        <div class="poll-footer">
+          <button class="poll-btn" onclick="submitPoll()">Submit vote</button>
+          <span class="poll-note" id="pollNote">42 Radicals have voted</span>
+          <span class="poll-thanks" id="pollThanks">Thanks for voting! 👊</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="recognition">
+      <div class="section-label">Recognition wall</div>
+      <div class="rwall">
+        <div class="rw-card featured">
+          <span class="rw-recent">Most recent win</span>
+          <div class="rw-ch-f">Challenge 03 · Merch Design Challenge</div>
+          <div class="rw-team-f">Kickass Collective</div>
+          <div class="rw-members-f">Priya · Rohan · Zara · Dev · Meera</div>
+          <div class="rw-quote-f">They came in with a concept no one saw coming — and kicked it out of the park. Judges' choice, unanimously.</div>
+        </div>
+        <div class="rw-card">
+          <div class="rw-ch">Challenge 02 · Radix Trivia Blitz</div>
+          <div class="rw-team">The Bold Pixels</div>
+          <div class="rw-members">Anika · Sam · Farrukh · Leila</div>
+          <div class="rw-quote">Four people, one brain cell between them — and they used it perfectly. Dominated the trivia round from the first question.</div>
+        </div>
+        <div class="rw-card wide">
+          <div class="rw-ch">Challenge 01 · The Picture Showdown</div>
+          <div class="rw-team">Kickass Collective</div>
+          <div class="rw-members">Priya · Rohan · Zara · Dev · Meera</div>
+          <div class="rw-quote">The team that started it all. Their submission set the bar for what Radix League creativity looks like — bold, unexpected, and very Radix.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="next">
+      <div class="section-label">Next up</div>
+      <div class="teaser">
+        <div class="teaser-left">
+          <div class="teaser-eyebrow">Challenge 04 · Coming soon</div>
+          <div class="teaser-title">The Radix <span>Pitch Off</span></div>
+          <div class="teaser-hint">You know the title. That's all you get for now. Start thinking, start scheming — details drop soon.</div>
+          <div class="teaser-blur">Rules · Format · Scoring criteria · Special guest judge · Prizes</div>
+        </div>
+        <div class="teaser-right">
+          <div class="lock">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+          </div>
+          <div class="teaser-label">Details drop</div>
+          <div class="teaser-date">May 2025</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span class="footer-logo">RADIX</span>
+    <p>Radix League · Season 1 · Internal</p>
+    <p>Judges: Sandy & Arjava</p>
+  </footer>
+
+  <script>
+    let selected = -1, voted = false;
+    const votes = [18, 19, 5];
+
+    function selectOpt(el, idx) {
+      if (voted) return;
+      selected = idx;
+      document.querySelectorAll('.poll-opt').forEach((o, i) => {
+        o.classList.toggle('selected', i === idx);
+      });
+    }
+
+    function submitPoll() {
+      if (selected === -1 || voted) return;
+      voted = true;
+      votes[selected]++;
+      const total = votes.reduce((a, b) => a + b, 0);
+      votes.forEach((v, i) => {
+        const pct = Math.round((v / total) * 100);
+        document.getElementById('bar' + i).style.width = pct + '%';
+        document.getElementById('pct' + i).textContent = pct + '%';
+      });
+      document.getElementById('pollNote').style.display = 'none';
+      document.getElementById('pollThanks').style.display = 'inline';
+      document.querySelectorAll('.poll-opt').forEach(o => o.style.cursor = 'default');
+    }
+
+    // Smooth active nav on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 80) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+
+</body>
+</html>
